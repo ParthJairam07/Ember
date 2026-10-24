@@ -1,0 +1,19 @@
+ M apps/expo-app/src/lib/rover-brain/autopilot.ts
+ M apps/expo-app/src/lib/rover-brain/geometry.ts
+ M apps/expo-app/src/lib/rover-brain/index.ts
+ M apps/expo-app/src/lib/rover-brain/leaf-map.ts
+ M apps/expo-app/tests/rover-brain/autopilot.test.ts
+ M apps/expo-app/tests/rover-brain/leaves.test.ts
+ M apps/expo-app/tests/rover-brain/scene.ts
+?? .agents/
+?? apps/expo-app/src/lib/rover-brain/brain.ts
+?? apps/expo-app/src/lib/rover-brain/sim.ts
+--- diff --stat apps/expo-app
+ apps/expo-app/src/lib/rover-brain/autopilot.ts    | 539 ++++++++++++++++++----
+ apps/expo-app/src/lib/rover-brain/geometry.ts     |  28 ++
+ apps/expo-app/src/lib/rover-brain/index.ts        |   6 +-
+ apps/expo-app/src/lib/rover-brain/leaf-map.ts     |  47 +-
+ apps/expo-app/tests/rover-brain/autopilot.test.ts | 170 ++++++-
+ apps/expo-app/tests/rover-brain/leaves.test.ts    |  20 +-
+ apps/expo-app/tests/rover-brain/scene.ts          |  25 +-
+ 7 files changed, 709 insertions(+), 126 deletions(-)
