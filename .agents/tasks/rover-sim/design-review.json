@@ -1,0 +1,32 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "reviewDoc": "/Users/donaldlee/Documents/GitHub-Repos/soon2026/.agents/tasks/rover-sim/design-review.md",
+  "counts": { "HIGH": 2, "MEDIUM": 12, "NIT": 11 },
+  "findings": [
+    { "id": 1, "severity": "HIGH", "title": "Reference template exceeds 2500-leaf cap; validateWorld throws", "where": "§12 reference row vs validation cap", "fix": "Base 2/m², path carpet 80/m², trunk carpet r1.5 at 100/m², drift band 1x20 m at 30/m² (≈2347); assert expected count ≤ 2300 per template in generate.test.ts" },
+    { "id": 2, "severity": "HIGH", "title": "Drop-off and up-step detection impossible on bilinear 5 cm grid", "where": "§9 terrain.ts, §12 TerrainSpec, §13 Drops", "fix": "Evaluate steps analytically in heightAt (grid + exact step offsets); treat a wheel up-step > climbStepM as a solid collision; add up-curb collision test" },
+    { "id": 3, "severity": "MEDIUM", "title": "Detection camera uses stale depth, phone uses same-frame depth", "where": "§14.3", "fix": "Render a fresh depth map from C_true(t0) at each detection capture and attach it" },
+    { "id": 4, "severity": "MEDIUM", "title": "Ideal preset yields 100 Hz detection frames; 'same tick' contradicts §16 order", "where": "§14.3, §16", "fix": "Add detectPeriodMs=333 in all presets; next capture = max(delivery, lastCapture+detectPeriodMs); ideal delivery at next step's (1)" },
+    { "id": 5, "severity": "MEDIUM", "title": "AR origin height ambiguous; should be camera's initial 3D position", "where": "§11", "fix": "T_ar maps initial camera position (floor at y≈-cameraHeightM) with random yaw; ideal identity; add realistic floor test" },
+    { "id": 6, "severity": "MEDIUM", "title": "Projection round-trip test metric/conditions undefined", "where": "AC10(a), §21 detector.test.ts", "fix": "Horizontal distance to true centre; ideal, full-res depth, curl 0, isolated leaf at 1–2 m; LiDAR ≤3 cm, floor ray ≤1 cm, |y|≤3 cm" },
+    { "id": 7, "severity": "MEDIUM", "title": "Detector test asserts v > 384 for leaf ahead; wrong beyond 0.82 m", "where": "§21 detector.test.ts", "fix": "Leaf (0,0,-1.5): u=288±2, v=289.5±2; (0,0,-0.6): v=455±2; (0.3,0,-1.5): u>288, bearing +11.3±0.5" },
+    { "id": 8, "severity": "MEDIUM", "title": "carryDump detection rule ambiguous (no step before start)", "where": "§17.1", "fix": "Static check at load: Brain && Brain.prototype.setPile && DEFAULT_AUTOPILOT.capacity → 'brain', else 'shim'; amber note if brain never empties a full scoop in 30 s" },
+    { "id": 9, "severity": "MEDIUM", "title": "Claim that Reset picks up brain edits is unverified/likely wrong (module cache, HMR propagation)", "where": "§10", "fix": "Self-accept HMR in brainAdapter, mark 'Brain code changed; press Reset', Reset re-imports with cache-bust; unit test reload with fake modules" },
+    { "id": 10, "severity": "MEDIUM", "title": "git status clean under apps/expo-app unworkable with concurrent brain agent", "where": "AC12, §23 steps 12/18", "fix": "Check that the sim task's own staged changes/commits never touch apps/expo-app; record baseline; brain-agent changes are not failures" },
+    { "id": 11, "severity": "MEDIUM", "title": "Manual WASD ignored while controller <select> keeps focus", "where": "§17.2 manual.ts, AC6", "fix": "Blur select and focus canvas on switch to manual; manual.ts ignores only text inputs/textarea/contentEditable; add hint" },
+    { "id": 12, "severity": "MEDIUM", "title": "Splat mode scene restore and blob URL lifetime on mode switch unspecified", "where": "§19", "fix": "Keep lastSplatScene state (initial DEFAULT_SCENE), restore on switching back, never revoke on mode switch; acceptance check" },
+    { "id": 13, "severity": "MEDIUM", "title": "Pile heights 8–20 cm infeasible with stated leaf counts and stack model", "where": "§8, §12 piles, §15.1", "fix": "Height-driven piles: r 0.3–0.4, h 0.08–0.15, n=ceil(πr²h/2/(leafLayerM·meanLeafArea)); test max stack within ±30% of h" },
+    { "id": 14, "severity": "MEDIUM", "title": "Internal conflicts: A1 vs §10 hook API; forest-floor density; M1 determinism uses M2 template; AC1 button names", "where": "A1, §8, §12, §21, §23, AC1", "fix": "Align A1 with §10; forest-floor 4/m² + three r1.5 carpets at 100/m²; M1 sim.test on sample seed 1; AC1 lists actual controls" },
+    { "id": 15, "severity": "NIT", "title": "mergeConfig concatenates include arrays; report config not type-checked", "where": "§21 Report", "fix": "Object-spread override of test.include; add vitest.report.config.ts to tsconfig.node.json include" },
+    { "id": 16, "severity": "NIT", "title": "Detection labels differ from phone's short labels", "where": "§14.3", "fix": "Use dead leaf / brown leaf / dry leaf / fallen leaves / leaves on ground / leaf pile" },
+    { "id": 17, "severity": "NIT", "title": "Caption helpers live in RN hook, not importable", "where": "§17", "fix": "Copy caption formatting into brainAdapter with a comment" },
+    { "id": 18, "severity": "NIT", "title": "Effective LiDAR range 4 m due to confidence rule", "where": "§14.2", "fix": "State explicitly that 4–5 m readings have confidence 0" },
+    { "id": 19, "severity": "NIT", "title": "Pile spot AR y undefined", "where": "§11, §15.3", "fix": "pileAR.center = T_ar·(x, terrainHeight(x,z), z)" },
+    { "id": 20, "severity": "NIT", "title": "InstancedMesh bounding sphere stale after leaf moves", "where": "§18", "fix": "Null boundingSphere after dirty frames or disable culling and recompute on drag" },
+    { "id": 21, "severity": "NIT", "title": "Leaf boxes ignore curl height; short detection range", "where": "§14.3", "fix": "Add 4 lobe-tip points at y+curl·0.03 to the outline" },
+    { "id": 22, "severity": "NIT", "title": "Landscape convention test expectations unstated; DP3 misdescribes brain test intrinsics", "where": "§11, DP3", "fix": "Landscape asserts only world points/headings equal; AC10(b) portrait only; correct DP3" },
+    { "id": 23, "severity": "NIT", "title": "Detection-frame zoom not mentioned", "where": "§11, FR-6", "fix": "State zoom = 1, frameSize 576x768" },
+    { "id": 24, "severity": "NIT", "title": "Raw-function fallback path is speculative scope", "where": "§17, DP1", "fix": "Defer to M2; M1 treats missing Brain as fatal missing-exports" },
+    { "id": 25, "severity": "NIT", "title": "Forward vector for yaw not written down", "where": "§13 step 8", "fix": "forward(ψ) = (sin ψ, 0, −cos ψ)" }
+  ]
+}
